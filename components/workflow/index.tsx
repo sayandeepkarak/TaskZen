@@ -71,7 +71,7 @@ export default function Board() {
         align="flex-start"
         style={{
           padding: 24,
-          height: "calc(100vh - 48px)",
+          height: "100vh",
           overflowX: "auto",
           overflowY: "hidden",
           backgroundColor: "#5d3a73",

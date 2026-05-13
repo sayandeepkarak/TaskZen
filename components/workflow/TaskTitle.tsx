@@ -80,7 +80,7 @@ export default function TaskTitle({ task, blockId }: TaskTitleProps) {
         ref={inputRef}
         value={name}
         maxLength={300}
-        autoSize={true}
+        autoSize={{ minRows: 5 }}
         onChange={(e) => setName(e.target.value)}
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
@@ -102,7 +102,7 @@ export default function TaskTitle({ task, blockId }: TaskTitleProps) {
   return (
     <span
       onDoubleClick={handleDoubleClick}
-      className="h-[36px] cursor-text text-[13px] leading-[1.4] font-semibold wrap-break-word text-[#1f1f1f]"
+      className="min-h-[36px] cursor-text text-[13px] leading-[1.4] font-semibold wrap-break-word text-[#1f1f1f]"
     >
       {task.name}
     </span>
