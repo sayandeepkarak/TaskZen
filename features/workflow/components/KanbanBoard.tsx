@@ -1,6 +1,7 @@
 "use client";
 
 import { Flex } from "antd";
+import { Plus } from "lucide-react";
 import { AppButton } from "@/components/ui";
 import { BlockColumn } from "@/features/workflow/components/BlockColumn";
 import { useWorkflowStore } from "@/stores/workflowStore";
@@ -22,19 +23,12 @@ export function KanbanBoard() {
         <BlockColumn key={block.id} block={block} />
       ))}
 
-      <div style={{ minWidth: 200 }}>
-        <AppButton
-          type="dashed"
-          onClick={addBlock}
-          style={{
-            width: 200,
-            height: 40,
-            fontSize: 13,
-            color: "#999",
-          }}
-          label="+ Add a new block"
-        />
-      </div>
+      <AppButton
+        type="dashed"
+        icon={Plus}
+        onClick={addBlock}
+        label="Add a new block"
+      />
     </Flex>
   );
 }

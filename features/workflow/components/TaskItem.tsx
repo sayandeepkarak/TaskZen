@@ -5,18 +5,19 @@ import { Dropdown, Flex } from "antd";
 import type { MenuProps } from "antd";
 import { MoreHorizontal } from "lucide-react";
 import { AppInput } from "@/components/ui";
+import { useWorkflowStore, generateId } from "@/stores/workflowStore";
 import type { Task } from "@/types";
 
 interface TaskItemProps {
   task: Task;
-  onDelete: () => void;
-  onRename: (name: string) => void;
+  blockId: string;
 }
 
-export function TaskItem({ task, onDelete, onRename }: TaskItemProps) {
-  const [editing, setEditing] = useState(false);
-  const [name, setName] = useState(task.name);
-  const inputRef = useRef<{ focus: () => void } | null>(null);
+export function TaskItem({ task, blockId }: TaskItemProps) {
+  const { deleteTask, updateTask } = useWorkflowStore();
+  const [editing, setEditing] = useState<boolean>(!task.id);
+  const [name, setName] = useState<string>(task.name);
+  const inputRef = useRef<{ focus: () => void } | undefined>(undefined);
 
   useEffect(() => {
     if (editing) {
@@ -30,21 +31,39 @@ export function TaskItem({ task, onDelete, onRename }: TaskItemProps) {
 
   function handleBlur() {
     const trimmed = name.trim();
-    if (trimmed) {
-      onRename(trimmed);
+
+    if (!task.id) {
+      if (!trimmed) {
+        deleteTask(blockId, task.id);
+      } else {
+        updateTask(blockId, task.id, {
+          ...task,
+          id: generateId(),
+          name: trimmed,
+        });
+        setEditing(false);
+      }
     } else {
-      setName(task.name);
+      if (!trimmed) {
+        setName(task.name);
+      } else if (trimmed !== task.name) {
+        updateTask(blockId, task.id, { ...task, name: trimmed });
+      }
+      setEditing(false);
     }
-    setEditing(false);
   }
 
-  function handleKeyDown(e: React.KeyboardEvent) {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
-      (e.target as HTMLInputElement).blur();
+      e.currentTarget.blur();
     }
     if (e.key === "Escape") {
-      setName(task.name);
-      setEditing(false);
+      if (!task.id) {
+        deleteTask(blockId, task.id);
+      } else {
+        setName(task.name);
+        setEditing(false);
+      }
     }
   }
 
@@ -53,7 +72,7 @@ export function TaskItem({ task, onDelete, onRename }: TaskItemProps) {
       key: "delete",
       label: "Delete",
       danger: true,
-      onClick: onDelete,
+      onClick: () => deleteTask(blockId, task.id),
     },
   ];
 
@@ -73,37 +92,38 @@ export function TaskItem({ task, onDelete, onRename }: TaskItemProps) {
         <AppInput
           ref={inputRef}
           size="small"
+          variant="borderless"
           value={name}
           onChange={(e) => {
             setName(e.target.value);
           }}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
-          style={{ flex: 1 }}
+          style={{ 
+            flex: 1, 
+            padding: 0, 
+            fontSize: 13, 
+            lineHeight: "20px" 
+          }}
+          placeholder="Task name..."
         />
       ) : (
         <span
           onDoubleClick={handleDoubleClick}
-          style={{
-            flex: 1,
-            fontSize: 13,
-            lineHeight: "20px",
-            cursor: "text",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-          }}
+          className="flex-1 cursor-text truncate text-[13px] leading-5"
         >
           {task.name}
         </span>
       )}
 
-      <Dropdown menu={{ items: menuItems }} trigger={["click"]}>
-        <MoreHorizontal
-          size={16}
-          style={{ cursor: "pointer", flexShrink: 0, color: "#999" }}
-        />
-      </Dropdown>
+      {task.id && (
+        <Dropdown menu={{ items: menuItems }} trigger={["click"]}>
+          <MoreHorizontal
+            size={16}
+            className="flex-shrink-0 cursor-pointer text-[#999] transition-colors hover:text-gray-600"
+          />
+        </Dropdown>
+      )}
     </Flex>
   );
 }

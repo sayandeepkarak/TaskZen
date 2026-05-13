@@ -2,10 +2,10 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Flex } from "antd";
-import { Trash2 } from "lucide-react";
+import { Trash2, Plus } from "lucide-react";
 import { AppButton, AppInput } from "@/components/ui";
 import { TaskItem } from "@/features/workflow/components/TaskItem";
-import { useWorkflowStore } from "@/stores/workflowStore";
+import { useWorkflowStore, generateId } from "@/stores/workflowStore";
 import type { Block } from "@/types";
 
 interface BlockColumnProps {
@@ -13,11 +13,10 @@ interface BlockColumnProps {
 }
 
 export function BlockColumn({ block }: BlockColumnProps) {
-  const { deleteBlock, renameBlock, addTask, deleteTask, renameTask } =
-    useWorkflowStore();
-  const [editing, setEditing] = useState(false);
-  const [name, setName] = useState(block.name);
-  const inputRef = useRef<{ focus: () => void } | null>(null);
+  const { deleteBlock, updateBlock, addTask } = useWorkflowStore();
+  const [editing, setEditing] = useState<boolean>(!block.id);
+  const [name, setName] = useState<string>(block.name);
+  const inputRef = useRef<{ focus: () => void } | undefined>(undefined);
 
   useEffect(() => {
     if (editing) {
@@ -31,21 +30,34 @@ export function BlockColumn({ block }: BlockColumnProps) {
 
   function handleBlur() {
     const trimmed = name.trim();
-    if (trimmed) {
-      renameBlock(block.id, trimmed);
+
+    if (!block.id) {
+      if (!trimmed) {
+        deleteBlock(block.id);
+      } else {
+        updateBlock(block.id, {
+          ...block,
+          id: generateId(),
+          name: trimmed,
+        });
+        setEditing(false);
+      }
     } else {
-      setName(block.name);
+      if (!trimmed) {
+        setName(block.name);
+      } else if (trimmed !== block.name) {
+        updateBlock(block.id, { ...block, name: trimmed });
+      }
+      setEditing(false);
     }
-    setEditing(false);
   }
 
-  function handleKeyDown(e: React.KeyboardEvent) {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
-      (e.target as HTMLInputElement).blur();
+      e.currentTarget.blur();
     }
     if (e.key === "Escape") {
-      setName(block.name);
-      setEditing(false);
+      handleBlur();
     }
   }
 
@@ -59,56 +71,57 @@ export function BlockColumn({ block }: BlockColumnProps) {
         borderRadius: 8,
         backgroundColor: "#fafafa",
         maxHeight: "100%",
+        overflow: "hidden",
       }}
     >
-      {/* Block Header */}
       <Flex
         align="center"
         justify="space-between"
+        gap={10}
         style={{
           padding: "10px 12px",
-          borderBottom: "1px solid #f0f0f0",
         }}
       >
         {editing ? (
           <AppInput
             ref={inputRef}
             size="small"
+            variant="borderless"
             value={name}
             onChange={(e) => {
               setName(e.target.value);
             }}
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
-            style={{ flex: 1, marginRight: 8 }}
+            style={{ 
+              flex: 1, 
+              padding: 0, 
+              fontSize: 14, 
+              fontWeight: 600,
+              lineHeight: "22px"
+            }}
+            placeholder="Block name..."
           />
         ) : (
           <span
             onDoubleClick={handleDoubleClick}
-            style={{
-              fontWeight: 600,
-              fontSize: 14,
-              cursor: "text",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              flex: 1,
-            }}
+            className="flex-1 cursor-text truncate text-sm font-semibold"
           >
             {block.name}
           </span>
         )}
 
-        <Trash2
-          size={15}
-          style={{ cursor: "pointer", flexShrink: 0, color: "#999" }}
-          onClick={() => {
-            deleteBlock(block.id);
-          }}
-        />
+        {block.id && (
+          <Trash2
+            size={15}
+            className="flex-shrink-0 cursor-pointer text-[#999] transition-colors hover:text-red-500"
+            onClick={() => {
+              deleteBlock(block.id);
+            }}
+          />
+        )}
       </Flex>
 
-      {/* Tasks */}
       <Flex
         vertical
         gap={6}
@@ -118,32 +131,23 @@ export function BlockColumn({ block }: BlockColumnProps) {
           padding: "8px 10px",
         }}
       >
-        {block.tasks.map((task) => (
+        {block.tasks.map((task, index) => (
           <TaskItem
-            key={task.id}
+            key={task.id || `draft-${index}`}
             task={task}
-            onDelete={() => {
-              deleteTask(block.id, task.id);
-            }}
-            onRename={(newName) => {
-              renameTask(block.id, task.id, newName);
-            }}
+            blockId={block.id}
           />
         ))}
-      </Flex>
-
-      {/* Add Task */}
-      <div style={{ padding: "8px 10px", borderTop: "1px solid #f0f0f0" }}>
         <AppButton
           type="text"
-          block
+          icon={Plus}
           onClick={() => {
             addTask(block.id);
           }}
-          style={{ color: "#999", fontSize: 13 }}
-          label="+ Add a task"
+          className="w-max"
+          label="Add a task"
         />
-      </div>
+      </Flex>
     </Flex>
   );
 }

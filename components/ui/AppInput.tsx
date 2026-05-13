@@ -3,34 +3,27 @@
 import { forwardRef } from "react";
 import { Input } from "antd";
 import type { InputProps, InputRef } from "antd";
+import { cn } from "@/lib/utils";
 
 interface AppInputProps extends InputProps {
   label?: string;
-  error?: string;
 }
 
 export const AppInput = forwardRef<InputRef, AppInputProps>(
-  ({ label, error, status, ...props }, ref) => {
+  ({ label, style, className, ...props }, ref) => {
     return (
-      <div>
+      <div className="flex w-full flex-col gap-1">
         {label && (
-          <label
-            style={{
-              display: "block",
-              marginBottom: 4,
-              fontSize: 13,
-              fontWeight: 500,
-            }}
-          >
+          <label className="text-[13px] font-medium text-gray-700">
             {label}
           </label>
         )}
-        <Input ref={ref} status={error ? "error" : status} {...props} />
-        {error && (
-          <p style={{ color: "#ff4d4f", fontSize: 12, marginTop: 2 }}>
-            {error}
-          </p>
-        )}
+        <Input 
+          ref={ref} 
+          style={style} 
+          className={cn("ant-input-custom", className)} 
+          {...props} 
+        />
       </div>
     );
   },
