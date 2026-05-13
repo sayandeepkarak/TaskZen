@@ -18,12 +18,7 @@ export const AppInput = forwardRef<InputRef, AppInputProps>(
             {label}
           </label>
         )}
-        <Input 
-          ref={ref} 
-          style={style} 
-          className={cn("ant-input-custom", className)} 
-          {...props} 
-        />
+        <Input ref={ref} style={style} className={cn(className)} {...props} />
       </div>
     );
   },

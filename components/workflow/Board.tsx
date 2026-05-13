@@ -5,14 +5,14 @@ import { Flex } from "antd";
 import { Plus } from "lucide-react";
 import { DragDropProvider } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
-import { AppButton } from "@/components/ui";
-import { BlockColumn } from "@/features/workflow/components/Block";
+import { AppButton } from "@/components/wrapper";
+import Block from "./Block";
 import { useWorkflowStore } from "@/stores/workflowStore";
-import type { Block } from "@/types";
+import type { Block as BlockType } from "@/types";
 
-export function KanbanBoard() {
+export default function Board() {
   const { blocks, setBlocks, addBlock, moveTask } = useWorkflowStore();
-  const previousBlocks = useRef<Block[]>(blocks);
+  const previousBlocks = useRef<BlockType[]>(blocks);
 
   const onDragStart = () => {
     previousBlocks.current = blocks;
@@ -21,8 +21,11 @@ export function KanbanBoard() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onDragOver = (event: any) => {
     const { source, target } = event.operation;
-    if (source?.type === "column") return;
-    if (source?.type === "item") {
+
+    if (!source || !target) return;
+
+    if (source.type === "column") return;
+    if (source.type === "item") {
       const targetBlockId = target.type === "column" ? target.id : target.group;
       const targetIndex = target.type === "column" ? 0 : target.index;
       if (targetBlockId) {
@@ -61,7 +64,7 @@ export function KanbanBoard() {
         }}
       >
         {blocks.map((block, index) => (
-          <BlockColumn key={block.id} block={block} index={index} />
+          <Block key={block.id} block={block} index={index} />
         ))}
 
         <AppButton

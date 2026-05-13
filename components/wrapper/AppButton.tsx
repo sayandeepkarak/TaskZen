@@ -6,7 +6,7 @@ import type { ButtonProps } from "antd";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
 
-interface AppButtonProps extends ButtonProps {
+interface AppButtonProps extends Omit<ButtonProps, "icon"> {
   label?: string;
   icon?: LucideIcon;
   iconSize?: number;
@@ -18,10 +18,6 @@ export const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
     ref,
   ) => {
     const defaultStyles: React.CSSProperties = {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: 8,
       minHeight: 38,
       fontSize: 13,
       color: "#999",

@@ -1,34 +1,16 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import type { Block, Task } from "@/types";
-
-interface WorkflowState {
-  blocks: Block[];
-  setBlocks: (blocks: Block[]) => void;
-  addBlock: () => void;
-  deleteBlock: (blockId: string) => void;
-  updateBlock: (blockId: string, block: Block) => void;
-  addTask: (blockId: string) => void;
-  deleteTask: (blockId: string, taskId: string) => void;
-  updateTask: (blockId: string, taskId: string, task: Task) => void;
-  moveTask: (
-    taskId: string,
-    targetBlockId: string,
-    targetIndex: number,
-  ) => void;
-}
-
-export function generateId(): string {
-  return crypto.randomUUID();
-}
+import type { WorkflowState } from "@/types/store.types";
+import { generateId } from "@/lib/utils";
 
 function createDefaultTask(): Task {
   return {
     id: "",
     name: "",
-    description: "",
     dueDate: "",
     priority: "Medium",
+    userId: undefined,
   };
 }
 
@@ -38,19 +20,27 @@ export const useWorkflowStore = create<WorkflowState>()(
       {
         id: generateId(),
         name: "To Do",
-        tasks: [
-          {
-            ...createDefaultTask(),
-            id: generateId(),
-            name: "Research competitors",
-          },
-        ],
+        tasks: [],
+      },
+      {
+        id: generateId(),
+        name: "In Progress",
+        tasks: [],
+      },
+      {
+        id: generateId(),
+        name: "Completed",
+        tasks: [],
       },
     ],
 
-    setBlocks: (blocks) => {
+    setBlocks: (blocksOrFn) => {
       set((state) => {
-        state.blocks = blocks;
+        if (typeof blocksOrFn === "function") {
+          state.blocks = blocksOrFn(state.blocks);
+        } else {
+          state.blocks = blocksOrFn;
+        }
       });
     },
 

@@ -1,5 +1,5 @@
-import { KanbanBoard } from "@/features/workflow/components/Board";
+import Board from "@/components/workflow/Board";
 
 export default function WorkFlow() {
-  return <KanbanBoard />;
+  return <Board />;
 }
