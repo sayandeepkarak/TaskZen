@@ -25,7 +25,7 @@ export default function BlockTitle({ block }: BlockTitleProps) {
     }
   }, []);
 
-  function handleBlur() {
+  const handleBlur = () => {
     const trimmed = name.trim();
 
     if (!block.id) {
@@ -48,9 +48,9 @@ export default function BlockTitle({ block }: BlockTitleProps) {
       updateBlock(block.id, { ...block, name: trimmed });
     }
     setEditing(false);
-  }
+  };
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.currentTarget.blur();
       return;
@@ -58,7 +58,7 @@ export default function BlockTitle({ block }: BlockTitleProps) {
     if (e.key === "Escape") {
       handleBlur();
     }
-  }
+  };
 
   return (
     <Flex
@@ -84,6 +84,7 @@ export default function BlockTitle({ block }: BlockTitleProps) {
             fontSize: 14,
             fontWeight: 600,
             lineHeight: "22px",
+            color: "#fff",
           }}
           maxLength={25}
           placeholder="Block name..."
@@ -91,7 +92,7 @@ export default function BlockTitle({ block }: BlockTitleProps) {
       ) : (
         <span
           onDoubleClick={() => setEditing(true)}
-          className="flex-1 cursor-default truncate text-sm font-semibold"
+          className="flex-1 cursor-default truncate text-sm font-semibold text-white"
         >
           {block.name}
         </span>
@@ -100,7 +101,7 @@ export default function BlockTitle({ block }: BlockTitleProps) {
       {block.id && (
         <Trash2
           size={15}
-          className="shrink-0 cursor-pointer text-[#999] transition-colors hover:text-red-500"
+          className="shrink-0 cursor-pointer text-white/60 transition-colors hover:text-white"
           onClick={() => deleteBlock(block.id)}
         />
       )}

@@ -24,13 +24,18 @@ export default function TaskTitle({ task, blockId }: TaskTitleProps) {
     }
   }, []);
 
-  function handleBlur() {
+  const handleRevertName = () => {
+    setName(task.name);
+    setEditing(false);
+  };
+
+  const handleBlur = () => {
     const trimmed = name.trim();
     if (!trimmed) {
       if (!task.id) {
         deleteTask(blockId, task.id);
       } else {
-        revertName();
+        handleRevertName();
       }
       return;
     }
@@ -48,9 +53,9 @@ export default function TaskTitle({ task, blockId }: TaskTitleProps) {
       });
     }
     setEditing(false);
-  }
+  };
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.currentTarget.blur();
       return;
@@ -60,15 +65,14 @@ export default function TaskTitle({ task, blockId }: TaskTitleProps) {
       if (!task.id) {
         deleteTask(blockId, task.id);
       } else {
-        revertName();
+        handleRevertName();
       }
     }
-  }
+  };
 
-  function revertName() {
-    setName(task.name);
-    setEditing(false);
-  }
+  const handleDoubleClick = () => {
+    setEditing(true);
+  };
 
   if (editing) {
     return (
@@ -97,8 +101,8 @@ export default function TaskTitle({ task, blockId }: TaskTitleProps) {
 
   return (
     <span
-      onDoubleClick={() => setEditing(true)}
-      className="cursor-text text-[13px] leading-[1.4] font-semibold wrap-break-word text-[#1f1f1f]"
+      onDoubleClick={handleDoubleClick}
+      className="h-[36px] cursor-text text-[13px] leading-[1.4] font-semibold wrap-break-word text-[#1f1f1f]"
     >
       {task.name}
     </span>

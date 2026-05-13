@@ -17,7 +17,9 @@ export default function TaskDueDate({ task, blockId }: TaskDueDateProps) {
   const { updateTask } = useWorkflowStore();
   const [open, setOpen] = useState(false);
 
-  const dateValue = task.dueDate ? dayjs(task.dueDate).format("DD MMM, YYYY") : "--";
+  const dateValue = task.dueDate
+    ? dayjs(task.dueDate).format("DD MMM, YYYY")
+    : "--";
 
   const handleUpdate = (date: string) => {
     updateTask(blockId, task.id, {
@@ -41,7 +43,7 @@ export default function TaskDueDate({ task, blockId }: TaskDueDateProps) {
       </div>
       <AppCalendar
         open={open}
-        onOpenChange={setOpen}
+        onOpenChange={(value: boolean) => setOpen(value)}
         value={task.dueDate}
         onChange={handleUpdate}
         style={{

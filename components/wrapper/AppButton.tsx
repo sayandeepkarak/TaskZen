@@ -18,7 +18,7 @@ export const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
     ref,
   ) => {
     const defaultStyles: React.CSSProperties = {
-      minHeight: 38,
+      minHeight: 30,
       fontSize: 13,
       color: "#999",
       padding: "0px 10px",

@@ -8,6 +8,7 @@ import { AppButton } from "@/components/wrapper";
 import BlockTitle from "./BlockTitle";
 import BlockTasks from "./BlockTasks";
 import { useWorkflowStore } from "@/stores/workflowStore";
+import { CATEGORY_COLOR_MAP } from "@/constants";
 import type { Block } from "@/types";
 
 interface BlockProps {
@@ -25,6 +26,9 @@ export default function Block({ block, index }: BlockProps) {
     accept: ["item", "column"],
   });
 
+  const firstLetter = block.name.charAt(0).toUpperCase();
+  const categoryColor = CATEGORY_COLOR_MAP[block?.id ? firstLetter : "B"];
+
   return (
     <div ref={ref} className="max-h-full rounded-lg">
       <Flex
@@ -32,11 +36,12 @@ export default function Block({ block, index }: BlockProps) {
         style={{
           width: 280,
           minWidth: 280,
-          border: "2px solid #e8e8e8",
           borderRadius: 8,
-          backgroundColor: "#fafafa",
+          backgroundColor: `${categoryColor}`,
           maxHeight: "100%",
           overflow: "hidden",
+          paddingBottom: "10px",
+          color: "#fff",
         }}
       >
         <BlockTitle block={block} />
@@ -48,7 +53,8 @@ export default function Block({ block, index }: BlockProps) {
             type="text"
             icon={Plus}
             style={{
-              margin: "5px 10px",
+              margin: "0px 10px",
+              color: "#fff",
             }}
             onClick={() => addTask(block.id)}
             className="w-max"

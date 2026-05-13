@@ -19,22 +19,20 @@ export default function BlockTasks({ block }: BlockTasksProps) {
         padding: "8px 10px",
       }}
     >
-      {block.tasks.length ? (
-        block.tasks.map((task, taskIndex) => (
-          <Task
-            key={task.id || `draft-${taskIndex}`}
-            task={task}
-            blockId={block.id}
-            index={taskIndex}
-          />
-        ))
-      ) : (
-        block.id && (
-          <div className="py-6 text-center text-xs italic text-gray-400">
-            No tasks available
-          </div>
-        )
-      )}
+      {block.tasks.length
+        ? block.tasks.map((task, taskIndex) => (
+            <Task
+              key={task.id || `draft-${taskIndex}`}
+              task={task}
+              blockId={block.id}
+              index={taskIndex}
+            />
+          ))
+        : block.id && (
+            <div className="py-[21px] text-center text-xs text-gray-400 italic">
+              No tasks available
+            </div>
+          )}
     </Flex>
   );
 }
