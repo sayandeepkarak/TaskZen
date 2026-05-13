@@ -101,7 +101,7 @@ export default function BlockTitle({ block }: BlockTitleProps) {
       {block.id && (
         <Trash2
           size={15}
-          className="shrink-0 cursor-pointer text-white/60 transition-colors hover:text-white"
+          className="shrink-0 cursor-pointer text-white opacity-0 transition-all group-hover:opacity-100"
           onClick={() => deleteBlock(block.id)}
         />
       )}

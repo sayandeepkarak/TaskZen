@@ -73,6 +73,7 @@ export default function Board() {
           padding: 24,
           height: "calc(100vh - 48px)",
           overflowX: "auto",
+          overflowY: "hidden",
           backgroundColor: "#5d3a73",
         }}
       >
@@ -88,6 +89,7 @@ export default function Board() {
           style={{
             backgroundColor: "rgba(255, 255, 255, 0.25)",
             color: "#fff",
+            minWidth: "auto",
           }}
         />
       </Flex>

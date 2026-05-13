@@ -15,30 +15,30 @@ export const PRIORITIES: readonly Priority[] = [
 ] as const;
 
 export const CATEGORY_COLOR_MAP: Record<string, string> = {
-  A: "#3b82f6", // blue
-  B: "#22c55e", // green
-  C: "#f59e0b", // amber
-  D: "#ef4444", // red
-  E: "#8b5cf6", // violet
-  F: "#06b6d4", // cyan
-  G: "#84cc16", // lime
-  H: "#ec4899", // pink
-  I: "#14b8a6", // teal
-  J: "#64748b", // slate
-  K: "#f97316", // orange
-  L: "#10b981", // emerald
-  M: "#6366f1", // indigo
-  N: "#a855f7", // purple
-  O: "#f43f5e", // rose
-  P: "#0ea5e9", // sky
-  Q: "#eab308", // yellow
-  R: "#16a34a", // dark green
-  S: "#2563eb", // royal blue
-  T: "#9333ea", // vivid purple
-  U: "#dc2626", // deep red
-  V: "#ea580c", // burnt orange
-  W: "#475569", // dark slate
-  X: "#0891b2", // ocean
-  Y: "#c026d3", // magenta
-  Z: "#71717a", // zinc
+  A: "#6E85B7",
+  B: "#7FB77E",
+  C: "#C69B7B",
+  D: "#C97C7C",
+  E: "#8E7DBE",
+  F: "#6FA7B8",
+  G: "#9BAE6D",
+  H: "#B784A7",
+  I: "#6C9A9A",
+  J: "#7B8494",
+  K: "#C08B5C",
+  L: "#5F9E8F",
+  M: "#7AA874",
+  N: "#7186D6",
+  O: "#9D7AD2",
+  P: "#C57B8A",
+  Q: "#B7A05A",
+  R: "#5C8F72",
+  S: "#5F84C9",
+  T: "#8268C7",
+  U: "#B96A6A",
+  V: "#B97A52",
+  W: "#616B7A",
+  X: "#5F96A8",
+  Y: "#A67BA5",
+  Z: "#727986",
 } as const;

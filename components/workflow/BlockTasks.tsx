@@ -13,6 +13,7 @@ export default function BlockTasks({ block }: BlockTasksProps) {
     <Flex
       vertical
       gap={6}
+      className="no-scrollbar"
       style={{
         flex: 1,
         overflowY: "auto",
@@ -29,7 +30,7 @@ export default function BlockTasks({ block }: BlockTasksProps) {
             />
           ))
         : block.id && (
-            <div className="py-[21px] text-center text-xs text-gray-400 italic">
+            <div className="py-[21px] text-center text-xs text-white/70 italic">
               No tasks available
             </div>
           )}

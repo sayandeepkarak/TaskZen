@@ -9,20 +9,21 @@ import BlockTitle from "./BlockTitle";
 import BlockTasks from "./BlockTasks";
 import { useWorkflowStore } from "@/stores/workflowStore";
 import { CATEGORY_COLOR_MAP } from "@/constants";
-import type { Block } from "@/types";
+import type { Block as BlockType } from "@/types";
 
 interface BlockProps {
-  block: Block;
+  block: BlockType;
   index: number;
 }
 
 export default function Block({ block, index }: BlockProps) {
   const { addTask } = useWorkflowStore();
+
   const { ref } = useSortable({
     id: block.id,
     index,
     type: "column",
-    collisionPriority: CollisionPriority.Low,
+    collisionPriority: CollisionPriority.Normal,
     accept: ["item", "column"],
   });
 
@@ -30,7 +31,7 @@ export default function Block({ block, index }: BlockProps) {
   const categoryColor = CATEGORY_COLOR_MAP[block?.id ? firstLetter : "B"];
 
   return (
-    <div ref={ref} className="max-h-full rounded-lg">
+    <div ref={ref} className="group h-full max-h-full rounded-lg">
       <Flex
         vertical
         style={{
