@@ -18,6 +18,8 @@ export default function BlockTasks({ block }: BlockTasksProps) {
         flex: 1,
         overflowY: "auto",
         padding: "8px 10px",
+        msOverflowStyle: "none",
+        scrollbarWidth: "none",
       }}
     >
       {block.tasks.length
