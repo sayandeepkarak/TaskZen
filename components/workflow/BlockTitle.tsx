@@ -92,7 +92,7 @@ export default function BlockTitle({ block }: BlockTitleProps) {
       ) : (
         <span
           onDoubleClick={() => setEditing(true)}
-          className="flex-1 cursor-default truncate text-sm font-semibold text-white"
+          className="flex-1 cursor-text truncate text-sm font-semibold text-white"
         >
           {block.name}
         </span>
