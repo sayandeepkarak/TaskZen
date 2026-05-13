@@ -16,7 +16,7 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: "TaskZen",
-  description: "TaskZen - Streamlined Task Management",
+  description: "TaskZen ----",
 };
 
 export default function RootLayout({
