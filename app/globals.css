@@ -5,11 +5,6 @@
   --font-heading: var(--font-outfit);
 }
 
-:root {
-  --background: #ffffff;
-  --foreground: #000000;
-}
-
 @layer base {
   body {
     @apply bg-white text-black;
