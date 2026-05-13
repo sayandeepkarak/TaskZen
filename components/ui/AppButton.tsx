@@ -22,7 +22,7 @@ export const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       alignItems: "center",
       justifyContent: "center",
       gap: 8,
-      height: 40,
+      minHeight: 40,
       fontSize: 13,
       color: "#999",
       ...style,

@@ -4,12 +4,18 @@ import type { Block, Task } from "@/types";
 
 interface WorkflowState {
   blocks: Block[];
+  setBlocks: (blocks: Block[]) => void;
   addBlock: () => void;
   deleteBlock: (blockId: string) => void;
   updateBlock: (blockId: string, block: Block) => void;
   addTask: (blockId: string) => void;
   deleteTask: (blockId: string, taskId: string) => void;
   updateTask: (blockId: string, taskId: string, task: Task) => void;
+  moveTask: (
+    taskId: string,
+    targetBlockId: string,
+    targetIndex: number,
+  ) => void;
 }
 
 export function generateId(): string {
@@ -41,6 +47,12 @@ export const useWorkflowStore = create<WorkflowState>()(
         ],
       },
     ],
+
+    setBlocks: (blocks) => {
+      set((state) => {
+        state.blocks = blocks;
+      });
+    },
 
     addBlock: () => {
       set((state) => {
@@ -97,6 +109,33 @@ export const useWorkflowStore = create<WorkflowState>()(
         const taskData = blockData.tasks.find((task) => task.id === taskId);
         if (!taskData) return;
         Object.assign(taskData, task);
+      });
+    },
+
+    moveTask: (taskId: string, targetBlockId: string, targetIndex: number) => {
+      set((state) => {
+        let sourceBlock: Block | undefined;
+        let taskIndex = -1;
+
+        for (const block of state.blocks) {
+          const index = block.tasks.findIndex((t) => t.id === taskId);
+          if (index !== -1) {
+            sourceBlock = block;
+            taskIndex = index;
+            break;
+          }
+        }
+
+        if (!sourceBlock || taskIndex < 0) return;
+
+        const targetBlock = state.blocks.find(
+          (block) => block.id === targetBlockId,
+        );
+        if (!targetBlock) return;
+
+        const [task] = sourceBlock.tasks.splice(taskIndex, 1);
+        if (!task) return;
+        targetBlock.tasks.splice(targetIndex, 0, task);
       });
     },
   })),
