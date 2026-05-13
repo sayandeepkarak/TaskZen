@@ -27,7 +27,7 @@ export default function TaskAction({ task, blockId }: TaskActionProps) {
     {
       key: "priority",
       label: "Change Priority",
-      icon: <Flag size={14} />,
+      icon: <Flag size={14} style={{ alignSelf: "center" }} />,
       children: PRIORITIES.map((priority) => ({
         key: priority,
         label: priority,
